@@ -1,0 +1,81 @@
+import numpy as np
+
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+
+def first_SWI_function(read_IDW):
+
+    index = len(read_IDW)
+    
+    first_list = []
+    second_list = []
+    third_list = []
+    for i in range(index):
+        if read_IDW[i,2] < 0:
+            first_TANK = -9999
+            second_TANK = -9999
+            third_TANK = -9999
+        else:
+            first_TANK = 0
+            second_TANK = 0
+            third_TANK = 1
+        first_list.append(first_TANK)
+        second_list.append(second_TANK)
+        third_list.append(third_TANK)
+
+    return first_list, second_list, third_list
+
+
+
+def Range_function(read_IDW, vals_range, vals_RAP, first_list, second_list, third_list):
+    
+    IDW_lon = read_IDW[:,0]
+    IDW_lat = read_IDW[:,1]
+    first_SWI_header = [np.ravel(IDW_lon), np.ravel(IDW_lat), np.ravel(first_list), np.ravel(second_list), np.ravel(third_list)]
+    first_SWI_stack = np.stack(first_SWI_header, 1)
+    first_SWI_range = first_SWI_stack[(float(vals_range[0]) <= first_SWI_stack[:,0]) & (first_SWI_stack[:,0] <= float(vals_range[1]))
+                                      & (float(vals_range[2]) <= first_SWI_stack[:,1]) & (first_SWI_stack[:,1] <= float(vals_range[3]))]
+
+
+    input_RAP_data = vals_RAP
+    read_RAP = np.load(input_RAP_data)
+    RAP_range = read_RAP[(float(vals_range[0]) <= read_RAP[:,0]) & (read_RAP[:,0] <= float(vals_range[1]))
+                         & (float(vals_range[2]) <= read_RAP[:,1]) & (read_RAP[:,1] <= float(vals_range[3]))]
+
+
+    return first_SWI_range, RAP_range
+
+
+
+def npy_save_function(first_SWI_range, vals_output_date):
+
+    First = first_SWI_range[:,2]
+    Second = first_SWI_range[:,3]
+    Third = first_SWI_range[:,4]
+    SWI = First + Second + Third
+    print(SWI)
+
+    data_list = [SWI, First, Second, Third]
+    data_name = ['SWI', 'First', 'Second', 'Third']
+
+    lon = first_SWI_range[:,0]
+    lat = first_SWI_range[:,1]
+
+
+    for i in range(4):
+
+        header = [np.ravel(lon), np.ravel(lat), np.ravel(data_list[i])]
+        stack = np.stack(header, 1)
+        tmpd =f'{data_name[i]}_anal_{vals_output_date}.npy'
+        np.save(tmpd, stack)

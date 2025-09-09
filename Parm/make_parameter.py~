@@ -1,0 +1,73 @@
+import numpy as np
+
+from setting import L11, L12, b1, a11, a12, L2, b2, a2, L3, b3, a3, delta
+
+
+#
+#
+#
+#
+#
+#
+
+
+
+
+def make_parameter_function():
+    
+    parameters = {
+        'TANKU1': {
+            'L11': L11,
+            'L12': L12,
+            'b1': b1,
+            'a11': a11,
+            'a12': a12
+        },
+        'TANKU2': {
+            'L2': L2,
+            'b2': b2,
+            'a2': a2
+        },
+        'TANKU3': {
+            'L3': L3,
+            'b3': b3,
+            'a3': a3
+        },
+        'delta': {'delta': delta}
+    }
+
+
+    with open('log_parameter.txt', 'w') as f:
+        f.write('============ Parameter ============\n')
+        for tank, params in parameters.items(): 
+            for key, value in params.items():
+                f.write('\n')
+                f.write(f'{key}={value}')
+        f.write('\n')
+        f.write('')
+        f.write('============    End    ============')
+
+
+    
+
+
+    parameters_npy = np.array([
+         L11,
+         L12,
+         b1,
+         a11,
+         a12,
+         L2,
+         b2,
+         a2,
+         L3,
+         b3,
+         a3,
+         delta
+    ])
+
+
+    np.save('parameter.npy', parameters_npy)
+
+
+make_parameter_function()

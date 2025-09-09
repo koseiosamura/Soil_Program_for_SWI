@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+cycle_function(){
+
+    while [ ${start_unix} -le ${end_unix} ];
+    do
+	current_unix=${start_unix}
+	current_date=$(date -d "@$current_unix" "+%Y%m%d%H%M%S")
+	anal_unix=$((${start_unix} + ${timedelta}))
+	anal_date=$(date -d "@$anal_unix" "+%Y%m%d%H%M%S")
+	echo "${current_date}"
+	echo "${anal_date}"
+    done
+
+
+}

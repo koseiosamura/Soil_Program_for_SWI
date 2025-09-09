@@ -1,0 +1,100 @@
+#!/bin/bash
+
+
+#=================================================================
+#
+#
+#
+#
+#=================================================================
+
+. config.sh
+
+
+ENS=31
+start_member=001
+end_member=0${ENS}
+kind=sfc
+cond_kind=fcst
+RRA_ext=grib2
+
+readonly timedelta=3600
+readonly init_timeday=14
+readonly init_timehour=24
+readonly delta=10
+
+
+raid_dir=/mnt/hail8/nakaya
+EDR=/mnt/jet11/osamura/Ensemble
+RDR=/mnt/jet11/osamura/RAP
+
+WDR=${raid_dir}/Soil_program/calculation_Soil/result/Work/Ensemble
+WDR_date=${start_ymm}/${start_ymm}${start_mmm}${start_dmm}${start_hmm}00
+WIDR=${WDR}/${start_ymm}/IDW
+WPDR=${WDR}/${start_ymm}/para
+WRDR=${WDR}/${WDR_date}/RAP
+WINDR=${WDR}/${WDR_date}/init
+WEDR=${WDR}/${WDR_date}/ENS
+
+IDW_file=Z__C_RJTD_20200703180000_SRF_GPV_Gll5km_Psw_ANAL_grib2.bin
+IRD=${EDR}/${WDR_date}/${kind}/${start_member}
+IDW_RRA_grib=${cond_kind}_${kind}_199808010100.${RRA_ext}
+
+
+init_first_file=initial_SWI.npy
+IDW_SWI_file=IDW_lonlat.npy
+IDW_RRA_file=IDW_RRA_dis.npy
+Parameter_file=parameter.npy
+
+
+min_where=-1000
+max_where=1000
+
+
+readonly JMA_Rader=J
+if [ "${JMA_Rader}" = "J" ];
+then
+    dx=5
+    dy=5
+    lon_interval=0.0625
+    lat_interval=0.05
+    n_lon=352
+    n_lat=440
+    pre_level=0.1
+    RAP_lon_max=125.53125
+    RAP_lat_max=46.975
+    IDW_level=1
+elif ["${JMA_Rader}" = "O" ];
+then
+    dx=5
+    dy=5
+    lon_interval=0.0625
+    lat_interval=0.05
+    n_lon=352
+    n_lat=440
+    pre_level=0.1
+    RAP_lon_max=125.53125
+    RAP_lat_max=46.975
+    IDW_level=1
+fi
+
+
+SWI_lon_min=118
+SWI_lon_max=150
+SWI_lat_min=20
+SWI_lat_max=48
+SWI_lon_step=0.0625
+SWI_lat_step=0.05
+lon_size=512
+lat_size=560
+
+
+lon_min=137.36
+lon_max=140.13
+lat_min=36.85
+lat_max=38.55
+
+
+readonly data_ext=RAP
+R=6371.1
+k=4

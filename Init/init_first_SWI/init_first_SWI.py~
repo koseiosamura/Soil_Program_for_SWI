@@ -1,0 +1,47 @@
+import numpy as np
+import os
+from init_first_SWI_func import first_SWI_function, Range_function, npy_save_function
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+def init_first_SWI():
+
+    keys_RAP = "init_RAP_npy"
+    vals_RAP = os.environ[keys_RAP]
+
+    kyes_IDW = "IDW_SWI_data"
+    vals_IDW = os.environ[kyes_IDW]
+    
+    keys_range = ["lon_min", "lon_max", "lat_min", "lat_max"]
+    vals_range = [os.environ[kr] for kr in keys_range]
+    
+    keys_output_date = "init_output_SWI_date"
+    vals_output_date = os.environ[keys_output_date]
+
+
+    
+    input_IDW_data = vals_IDW
+    read_IDW = np.load(input_IDW_data)
+
+
+    first_list, second_list, third_list = first_SWI_function(read_IDW)
+    first_SWI_range, RAP_range = Range_function(read_IDW, vals_range, vals_RAP, first_list, second_list, third_list)
+    
+    npy_save_function(first_SWI_range, vals_output_date)
+    
+    
+    
+
+
+
+init_first_SWI()
