@@ -62,8 +62,8 @@ unzip_init_RAP_function(){
             cp ${rddir}/${init_RAP_data} ${WRDR}/init/RAP
             ext="{init_RAP_data##*.}"
         fi
-        
-	cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre
+         
+	cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre/unzip_c
         
 	gcc -std=c99 -O2 -o rapunzip_hourly rapunzip_hourly.c
         ./rapunzip_hourly ${WRDR}/init/RAP/${init_RAP_data} >> ${WRDR}/init/log/outpre.log
@@ -125,7 +125,7 @@ init_RAP_npy_function(){
 log_init_RAP_npy_function(){
 
     cat << EOF >> ${WRDR}/init/log/npy_hourly.txt
-${init_date_cycle:0:4}${init_date_cycle:4:2}${init_date_cycle:6:2}${init_date_cycle:8:2}00
+${init_output_RAP_date}
 EOF
 
 }

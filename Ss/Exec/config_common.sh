@@ -21,6 +21,7 @@ RRA_ext=grib2
 readonly timedelta=3600
 readonly init_timeday=14
 readonly init_timehour=24
+readonly timehour=24
 readonly delta=10
 
 
@@ -93,6 +94,10 @@ lon_min=137.36
 lon_max=140.13
 lat_min=36.85
 lat_max=38.55
+
+
+Log_cycleUnzip="10 --- Unzip"
+
 
 
 readonly data_ext=RAP

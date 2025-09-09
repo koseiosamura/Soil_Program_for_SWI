@@ -43,9 +43,9 @@ def init_SWI():
     SWI_lat_min = min(read_SWI[:,1])
     SWI_lat_max = max(read_SWI[:,1])
     RAP_range   = read_RAP[
-        (SWI_lon_min <= read_RAP[:,0]) & \ 
-        (read_RAP[:,0] <= SWI_lon_max) & \
-        (SWI_lat_min <= read_RAP[:,1]) & \
+        (SWI_lon_min <= read_RAP[:,0]) &  
+        (read_RAP[:,0] <= SWI_lon_max) & 
+        (SWI_lat_min <= read_RAP[:,1]) & 
         (read_RAP[:,1] <= SWI_lat_max)
     ]
     RAP_where = np.where(RAP_range[:,2] < 0, 0, RAP_range[:,2])

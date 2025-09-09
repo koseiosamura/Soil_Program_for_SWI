@@ -19,13 +19,7 @@ SWI_idw_fuction(){
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
     . mkdir_func.sh
     mkdir_IDW_function
-
-    ##########################
-    cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
-    . mkdir_func.sh
-    mkdir_RAP_function
-    ##########################
-
+    
     if [ ${start_ymm} -le 2001 ];
     then
 	IDW_5dx_function

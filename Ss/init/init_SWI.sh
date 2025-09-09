@@ -85,7 +85,7 @@ first_init_SWI_function(){
     python3 init_first_SWI.py
     for init_data_cycle in SWI First Second Third;
     do
-	mv ${init_data_cycle}_anal_${init_output_SWI_date}.npy ${init_dir}/init/${init_data_cycle}
+	mv ${init_data_cycle}_anal_${init_output_SWI_date}.npy ${WINDR}/init/${init_data_cycle}
     done
 
 }

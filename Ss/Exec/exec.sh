@@ -23,7 +23,7 @@ mkdir_WDR_function
 
 cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/init
 . init_pre_func.sh
-init_pre_function
+#init_pre_function
 
 cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
 . idw_SWI.sh
@@ -40,4 +40,4 @@ cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
 
 
 cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
-. num_SWI.sh
+. cycle.sh

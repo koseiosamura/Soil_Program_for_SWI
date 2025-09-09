@@ -1,0 +1,49 @@
+#!/bin/bash
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+set -e
+
+. ./cycle_func.sh
+
+
+cd  /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
+. mkdir_func.sh
+mkdir_ensemble_function
+
+
+cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
+. date_func.sh
+date_function
+
+
+while [ ${start_unix} -le ${end_unix} ];
+do
+    current_unix=${start_unix}
+    current_date=$(date -d "@$current_unix" "+%Y%m%d%H%M%S")
+    anal_unix=$((${start_unix} + ${timedelta} * ${timehour}))
+    anal_date=$(date -d "@$anal_unix" "+%Y%m%d%H%M%S")
+    dateCycle_Sta=$((${current_unix} + ${timedelta}))
+    dateCycle_End=$((${current_unix} + ${timehour} * ${timedelta}))
+    echo "${current_date}"
+    echo "${anal_date}"
+    c_yy=${current_date:0:4}
+    c_mm=${current_date:4:2}
+    c_dd=${current_date:6:2}
+    c_hh=${current_date:8:2}
+    a_yy=${anal_date:0:4}
+    a_mm=${anal_date:4:2}
+    a_dd=${anal_date:6:2}
+    a_hh=${anal_date:8:2}
+    cycle_function
+done
