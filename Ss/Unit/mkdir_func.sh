@@ -81,10 +81,13 @@ mkdir_ensemble_function(){
 
     for SWI_cycle in SWI First Second Third;
     do
-	if [ ! -d ${WEDR}/${SWI_cycle} ];
-	then
-	    mkdir -p ${WEDR}/${SWI_cycle}
-	fi
+	for ens_member in `seq -w 001 ${end_member}`
+	do
+	    if [ ! -d ${WEDR}/${SWI_cycle}/${ens_member} ];
+	    then
+		mkdir -p ${WEDR}/${SWI_cycle}/${ens_member}
+	    fi
+	done
     done
 
 }

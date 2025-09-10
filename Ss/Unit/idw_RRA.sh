@@ -15,14 +15,14 @@ set -e
 
 RRA_idw_function(){
 
-    if [ ! -s ${IRD}/${IDW_RRA_grib} ];
+    if [ ! -s ${IRD}/${start_ymm}/${IDW_RRA_grib} ];
     then
 	echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         echo "  CANNOT find ${IRD}/${IDW_RRA_grib}"
         echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         exit
     fi
-    cp ${IRD}/${IDW_RRA_grib} ${WIDR}/Ens/bin
+    cp ${IRD}/${start_ymm}/${IDW_RRA_grib} ${WIDR}/Ens/bin
     IDW_RRA_bin=${WIDR}/Ens/bin/${IDW_RRA_grib}
     if [ ! -s ${IDW_RRA_bin} ];
     then

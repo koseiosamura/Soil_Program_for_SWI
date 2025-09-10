@@ -83,9 +83,9 @@ first_init_SWI_function(){
     export init_output_SWI_date=${init_output_SWI_date}
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Init/init_first_SWI
     python3 init_first_SWI.py
-    for init_data_cycle in SWI First Second Third;
+    for init_SWI_cycle in SWI First Second Third;
     do
-	mv ${init_data_cycle}_anal_${init_output_SWI_date}.npy ${WINDR}/init/${init_data_cycle}
+	mv ${init_SWI_cycle}_anal_${init_output_SWI_date}.npy ${WINDR}/init/${init_data_cycle}
     done
 
 }
@@ -95,10 +95,10 @@ init_TANK_function(){
     
     if [ ${init_first_num} -eq ${anal_init_unix} ];
     then
-	for init_data_cycle in SWI First Second Third;
+	for init_SWI_cycle in SWI First Second Third;
 	do
-	    varname=init_${init_data_cycle}_data
-	    init_data_valus=${WINDR}/init/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
+	    local varname=init_${init_data_cycle}_data
+	    local init_data_valus=${WINDR}/init/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
 	    if [ ! -s ${init_data_valus} ];
 	    then
 		echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -109,10 +109,10 @@ init_TANK_function(){
 	    export ${varname}=${init_data_valus}
 	done
     else
-	for init_data_cycle in SWI First Second Third;
+	for init_SWI_cycle in SWI First Second Third;
         do
-	    varname=init_${init_data_cycle}_data
-            init_data_valus=${WINDR}/npy/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
+	    local varname=init_${init_data_cycle}_data
+            local init_data_valus=${WINDR}/npy/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
             if [ ! -s ${init_data_valus} ];
             then
                 echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -123,7 +123,7 @@ init_TANK_function(){
             export ${varname}=${init_data_valus}
 	done
     fi
-    Para_data=${WPDR}/${Parameter_file}
+    local Para_data=${WPDR}/${Parameter_file}
     if [ ! -s ${Para_data} ];
     then
         echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -136,9 +136,9 @@ init_TANK_function(){
     export parameter=${Para_data}
     export init_output_SWI_anal=${init_RAP_npy_date}
     python3 init_SWI.py
-    for init_data_cycle in SWI First Second Third;
+    for init_SWI_cycle in SWI First Second Third;
     do
-        mv ${init_data_cycle}_anal_${init_output_SWI_anal}.npy ${WINDR}/npy/${init_data_cycle}
+        mv ${init_SWI_cycle}_anal_${init_output_SWI_anal}.npy ${WINDR}/npy/${init_data_cycle}
     done
 
 }

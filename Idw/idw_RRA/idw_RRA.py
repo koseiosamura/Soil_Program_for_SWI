@@ -3,7 +3,7 @@ import os
 import pygrib
 from datetime import datetime
 
-from IDW_func import grib_select, calculate_distance
+from idw_func import grib_select, calculate_distance
 
 
 ###############################################################################################
@@ -17,7 +17,7 @@ from IDW_func import grib_select, calculate_distance
 #
 
 
-def IDW():
+def main_idw_RRA():
 
     print('============================',flush=True)
     print('         Start IDW ',flush=True)
@@ -39,7 +39,7 @@ def IDW():
 
     
     input_data = data_valu[1]
-    input_RRA = data_valu[0]
+    input_RRA  = data_valu[0]
 
     print('************ GRIB DATA NAME ************',flush=True)
     grbs = pygrib.open(input_RRA)
@@ -51,7 +51,7 @@ def IDW():
     lon, lat, gdata = grib_select(input_RRA,grbs)
     
 
-    header = [np.ravel(lon), np.ravel(lat), np.ravel(gdata)]
+    header     = [np.ravel(lon), np.ravel(lat), np.ravel(gdata)]
     RRA_lonlat = np.stack(header, 1)
     
 
@@ -77,9 +77,9 @@ def IDW():
 
 
     n = 1
-    step_float = np.arange(0,SWI_index,(SWI_index)/20)
+    step_float  = np.arange(0,SWI_index,(SWI_index)/20)
     step_arange = step_float.astype(np.int32)
-    print(step_arange)
+    
     for i in range(0,SWI_index):
         
         
@@ -114,7 +114,7 @@ def IDW():
 
     small_index_size = len(dis_lonlat)
     size = [int(small_index_size / 12), 12]
-    V = np.array(dis_lonlat).reshape(size).tolist()
+    V    = np.array(dis_lonlat).reshape(size).tolist()
     
 
     tmpd = f'{output_valu}'
@@ -130,4 +130,4 @@ def IDW():
     print(f'{now_end}',flush=True)
 
 
-IDW()
+main_RRA_idw()

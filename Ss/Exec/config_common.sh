@@ -18,6 +18,7 @@ kind=sfc
 cond_kind=fcst
 RRA_ext=grib2
 
+
 readonly timedelta=3600
 readonly init_timeday=14
 readonly init_timehour=24
@@ -29,6 +30,7 @@ raid_dir=/mnt/hail8/nakaya
 EDR=/mnt/jet11/osamura/Ensemble
 RDR=/mnt/jet11/osamura/RAP
 
+
 WDR=${raid_dir}/Soil_program/calculation_Soil/result/Work/Ensemble
 WDR_date=${start_ymm}/${start_ymm}${start_mmm}${start_dmm}${start_hmm}00
 WIDR=${WDR}/${start_ymm}/IDW
@@ -38,7 +40,7 @@ WINDR=${WDR}/${WDR_date}/init
 WEDR=${WDR}/${EDR_date}/SWI
 
 IDW_file=Z__C_RJTD_20200703180000_SRF_GPV_Gll5km_Psw_ANAL_grib2.bin
-IRD=${EDR}/${WDR_date}/${kind}/${start_member}
+IRD=${EDR}/${WDR_date}/${kind}
 IDW_RRA_grib=${cond_kind}_${kind}_199808010100.${RRA_ext}
 
 
@@ -97,7 +99,7 @@ lat_max=38.55
 
 
 Log_cycleUnzip="10 --- Unzip"
-
+Log_cycleInit="20 --- Init"
 
 
 readonly data_ext=RAP

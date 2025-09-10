@@ -1,0 +1,46 @@
+#!/bin/bash
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+set -e
+
+
+SWI_cycle_function(){
+
+    dateCycle_SWI_unix=${dateCycle_Sta}
+    while [ ${dateCycle_SWI_unix} -le ${dateCycle_End} ];
+    do
+	for ens_member in `seq -w 001 ${end_member}`
+	do
+	    SWI_RRA_function
+	done
+    done
+
+}
+
+
+
+SWI_RRA_function(){
+    
+    local dateCycle_SWI=$(date -d "@$dateCycle_SWI_unix" "+%Y%m%d%H%M%S")
+    SWI_yy=${dateCycle_SWI:0:4}
+    SWI_mm=${dateCycle_SWI:4:2}
+    SWI_dd=${dateCycle_SWI:6:2}
+    SWI_hh=${dateCycle_SWI:8:2}
+    cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Tank/RRA
+    local RRA_date=${SWI_yy}${SWI_mm}${SWI_dd}${SWI_hh}00
+    export RRA_data=${IRD}/${ens_member}/${cond_kind}_${kind}_${RRA_date}.grib2
+    export IDW_RRA_data=${WIDR}/Ens/data/${IDW_RRA_file}
+    export IDW_SWI_data=${WIDR}/RAP/data/${IDW_SWI_file}
+    python3 trra.py
+
+}

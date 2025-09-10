@@ -25,7 +25,7 @@ SWI_idw_fuction(){
 	IDW_5dx_function
     fi
     mv ${IDW_SWI_file} ${WIDR}/RAP/data
-    IDW_SWI_data=${WIDR}/RAP/data/${IDW_SWI_file}
+    local IDW_SWI_data=${WIDR}/RAP/data/${IDW_SWI_file}
     if [ ! -s ${IDW_SWI_data} ];
     then
 	echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -67,6 +67,10 @@ IDW_5dx_function(){
         exit
     fi
     export IDW_netcdf=${IDW_netcdf}
+    export lon_min=${lon_min}
+    export lon_max=${lon_max}
+    export lat_min=${lat_min}
+    export lat_max=${lat_max}
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Idw/idw_SWI
     python3 idw_SWI.py > ${WIDR}/RAP/log/IDW.txt
     

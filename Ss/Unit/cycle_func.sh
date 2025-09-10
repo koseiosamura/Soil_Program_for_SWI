@@ -14,16 +14,17 @@
 
 
 
-cycle_function(){
+cycle_RAP_function(){
 
     echo "========================================="
     echo "   Cycle 1hour"
     echo "       Init : ${c_yy}/${c_mm}/${c_dd} ${c_hh}:00"
     echo "       Anal : ${a_yy}/${a_mm}/${a_dd} ${a_hh}:00"
     echo "========================================="
-    unzip_RAP_function
     echo ${Log_cycleUnzip}
-    exit
+    unzip_RAP_function
+    RAP_npy_function
+    #exit
     
 
 }
@@ -46,28 +47,23 @@ unzip_RAP_function(){
     fi
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre/unzip_c
     gcc -std=c99 -O2 -o rapunzip_hourly rapunzip_hourly.c
-    ./rapunzip_hourly ${WRDR}/Ens/RAP/${RAP_data} > ${WRDR}/Ens/log/outpre.log
+    ./rapunzip_hourly ${WRDR}/Ens/RAP/${RAP_data} >> ${WRDR}/Ens/log/outpre.log
     mv *.bin ${WRDR}/Ens/bin
     log_RAP_function
-    RAP_npy_function
-
+    
 }
 
 
 RAP_npy_function(){
 
-    #dateCycle_Sta=$((${current_unix} + ${timedelta}))
-    #dateCycle_End=$((${current_unix} + ${timehour} * ${timedelta}))
-    while [ ${dateCycle_Sta} -le ${dateCycle_End} ];
+    local dateCycle_RAP=${dateCycle_Sta}
+    while [ ${dateCycle_RAP} -le ${dateCycle_End} ];
     do
-	dateCycle_unix=${dateCycle_Sta}
-	dateCycle=$(date -d "@$dateCycle_unix" "+%Y%m%d%H%M%S")
-	#R=$(date -d "@$dateCycle_End" "+%Y%m%d%H%M%S")
-	echo "${dateCycle}"
-	cy_yy=${dateCycle:0:4}
-	cy_mm=${dateCycle:4:2}
-	cy_dd=${dateCycle:6:2}
-	cy_hh=${dateCycle:8:2}
+	local dateCycle=$(date -d "@$dateCycle_RAP" "+%Y%m%d%H%M%S")
+	local cy_yy=${dateCycle:0:4}
+	local cy_mm=${dateCycle:4:2}
+	local cy_dd=${dateCycle:6:2}
+	local cy_hh=${dateCycle:8:2}
 	local output_bin=${WRDR}/Ens/bin/output_${cy_yy}${cy_mm}${cy_dd}_${cy_hh}00.bin
 	fileCheck_function ${output_bin}
 	if [ "${JMA_Rader}" = "J" ];
@@ -86,16 +82,81 @@ RAP_npy_function(){
             mv RAP_${output_RAP_date}.npy ${WRDR}/Ens/npy
 	    log_npy_function
         fi
-	#exit
-	dateCycle_Sta=$((${dateCycle_Sta} + ${timedelta}))
+	dateCycle_RAP=$((${dateCycle_RAP} + ${timedelta}))
     done
 
 }
 
 
+cycle_initCheck_function(){
+    
+    local dateCycle_check=${dateCycle_Sta}
+    if [ ! -s ${WIDR}/Ens/data/${IDW_RRA_file} ];
+    then
+	fileCheck_function ${WIDR}/Ens/data/${IDW_RRA_file}
+	exit
+    fi
+    if [ ${dateCycle_check} -eq $((${start_unix} + ${timedelta})) ];
+    then
+	for SWI_cycle in SWI First Second Third;
+	do
+	    if [ ! -s ${WINDR}/npy/${SWI_cycle}/${SWI_cycle}_anal_${c_yy}${c_mm}${c_dd}${c_hh}00.npy ];
+	    then
+		fileCheck_function ${WINDR}/npy/${SWI_cycle}/${SWI_cycle}_anal_${c_yy}${c_mm}${c_dd}${c_hh}00.npy
+		exit
+	    fi
+	done
+    else
+    	for SWI_cycle in SWI First Second Third;
+	do
+	    for ens_member in `seq -w 001 ${end_member}`
+	    do
+		if [ ! -s ${WEDR}/${SWI_cycle}/${ens_member}/${SWI_cycle}_anal_${c_yy}${c_mm}${c_dd}${c_hh}00.npy ];
+		then
+		    fileCheck_function ${WEDR}/${SWI_cycle}/${ens_member}/${SWI_cycle}_anal_${c_yy}${c_mm}${c_dd}${c_hh}00.npy
+		    exit
+		fi
+	    done
+	done
+    fi
+    while [ ${dateCycle_check} -le ${dateCycle_End} ];
+    do
+	local dateCycle=$(date -d "@$dateCycle_check" "+%Y%m%d%H%M%S")
+        echo "${dateCycle}"
+        local cy_yy=${dateCycle:0:4}
+        local cy_mm=${dateCycle:4:2}
+        local cy_dd=${dateCycle:6:2}
+        local cy_hh=${dateCycle:8:2}
+	local output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
+	if [ ! -s ${WRDR}/Ens/npy/RAP_${output_RAP_date}.npy ];
+	then
+	    fileCheck_function ${WRDR}/Ens/npy/RAP_${output_RAP_date}.npy
+	    exit
+	fi
+	for ens_member in `seq -w 001 ${end_member}`
+	do
+	    if [ ! -s ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RAP_date}.grib2 ];
+	    then
+		fileCheck_function ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RAP_date}.grib2
+		exit
+	    fi
+	done
+	dateCycle_check=$((${dateCycle_check} + ${timedelta}))
+    done 
+    if [ ! -s ${WIDR}/Ens/data/${IDW_RRA_file} ];
+    then
+        fileCheck_function ${WIDR}/Ens/data/${IDW_RRA_file}
+        exit
+    fi
+    
+    
+}
+
+
+
 log_RAP_function(){
 
-    cat <<EOF > ${WRDR}/Ens/log/date_init.txt
+    cat <<EOF >> ${WRDR}/Ens/log/date_init.txt
 START ${RAP_data}
       $(date)
 EOF
@@ -105,7 +166,7 @@ EOF
 
 log_npy_function(){
 
-    cat <<EOF > ${WRDR}/Ens/log/npy_hourly.txt
+    cat <<EOF >> ${WRDR}/Ens/log/npy_hourly.txt
 ${output_RAP_date}
 EOF
 
