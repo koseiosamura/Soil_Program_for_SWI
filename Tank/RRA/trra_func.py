@@ -43,7 +43,7 @@ def num_IDW_RRA(read_SWI_IDW,read_RRA_IDW,index_SWI,IDW_RRA_list,key_indices,RRA
             IDW_RRA = weight_pre(weight_data_list,read_RRA_IDW,i)
             IDW_RRA_list.append(IDW_RRA)
 
-    print(IDW_RRA_list)
+    
     return IDW_RRA_list
 
 

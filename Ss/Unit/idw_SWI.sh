@@ -25,7 +25,7 @@ SWI_idw_fuction(){
 	IDW_5dx_function
     fi
     mv ${IDW_SWI_file} ${WIDR}/RAP/data
-    local IDW_SWI_data=${WIDR}/RAP/data/${IDW_SWI_file}
+    IDW_SWI_data=${WIDR}/RAP/data/${IDW_SWI_file}
     if [ ! -s ${IDW_SWI_data} ];
     then
 	echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"

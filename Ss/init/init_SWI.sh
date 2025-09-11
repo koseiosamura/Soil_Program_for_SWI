@@ -55,7 +55,7 @@ init_numerical_SWI_function(){
         fi
 	if [ ${init_first_num} -eq ${anal_init_unix} ];
 	then
-	    first_init_SWI_function
+	    first_init_SWI_function ${IDW_SWI_data}
 	fi
 	init_TANK_function
 	start_init_unix=$((start_init_unix + ${timedelta}))
@@ -75,7 +75,7 @@ first_init_SWI_function(){
     python3 make_parameter.py
     mv ${Parameter_file} ${WDR}/${start_ymm}/para
     export init_RAP_npy=${init_RAP_npy}
-    export IDW_SWI_data=${IDW_SWI_data}
+    export IDW_SWI_data=$1
     export lon_min=${lon_min} 
     export lon_max=${lon_max} 
     export lat_min=${lat_min} 
@@ -85,7 +85,7 @@ first_init_SWI_function(){
     python3 init_first_SWI.py
     for init_SWI_cycle in SWI First Second Third;
     do
-	mv ${init_SWI_cycle}_anal_${init_output_SWI_date}.npy ${WINDR}/init/${init_data_cycle}
+	mv ${init_SWI_cycle}_anal_${init_output_SWI_date}.npy ${WINDR}/init/${init_SWI_cycle}
     done
 
 }
@@ -97,8 +97,8 @@ init_TANK_function(){
     then
 	for init_SWI_cycle in SWI First Second Third;
 	do
-	    local varname=init_${init_data_cycle}_data
-	    local init_data_valus=${WINDR}/init/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
+	    local varname=init_${init_SWI_cycle}_data
+	    local init_SWI_valus=${WINDR}/init/${init_SWI_cycle}/${init_SWI_cycle}_anal_${init_output_SWI_date}.npy
 	    if [ ! -s ${init_data_valus} ];
 	    then
 		echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -106,21 +106,23 @@ init_TANK_function(){
 		echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		exit
 	    fi
-	    export ${varname}=${init_data_valus}
+	    local ${varname}=${init_SWI_valus}
+	    export ${varname}
 	done
     else
 	for init_SWI_cycle in SWI First Second Third;
         do
-	    local varname=init_${init_data_cycle}_data
-            local init_data_valus=${WINDR}/npy/${init_data_cycle}/${init_data_cycle}_anal_${init_output_SWI_date}.npy
-            if [ ! -s ${init_data_valus} ];
+	    local varname=init_${init_SWI_cycle}_data
+            local init_SWI_valus=${WINDR}/npy/${init_SWI_cycle}/${init_SWI_cycle}_anal_${init_output_SWI_date}.npy
+            if [ ! -s ${init_SWI_valus} ];
             then
                 echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
                 echo "  CANNOT find ${init_data_valus}"
                 echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
                 exit
             fi
-            export ${varname}=${init_data_valus}
+	    local ${varname}=${init_SWI_valus}
+            export ${varname}
 	done
     fi
     local Para_data=${WPDR}/${Parameter_file}
@@ -138,7 +140,7 @@ init_TANK_function(){
     python3 init_SWI.py
     for init_SWI_cycle in SWI First Second Third;
     do
-        mv ${init_SWI_cycle}_anal_${init_output_SWI_anal}.npy ${WINDR}/npy/${init_data_cycle}
+        mv ${init_SWI_cycle}_anal_${init_output_SWI_anal}.npy ${WINDR}/npy/${init_SWI_cycle}
     done
 
 }

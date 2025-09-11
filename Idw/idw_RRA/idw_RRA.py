@@ -130,4 +130,4 @@ def main_idw_RRA():
     print(f'{now_end}',flush=True)
 
 
-main_RRA_idw()
+main_idw_RRA()

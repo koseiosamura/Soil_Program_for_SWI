@@ -14,6 +14,7 @@
 ENS=31
 start_member=001
 end_member=0${ENS}
+ctrl_member=031
 kind=sfc
 cond_kind=fcst
 RRA_ext=grib2
@@ -32,12 +33,13 @@ RDR=/mnt/jet11/osamura/RAP
 
 
 WDR=${raid_dir}/Soil_program/calculation_Soil/result/Work/Ensemble
-WDR_date=${start_ymm}/${start_ymm}${start_mmm}${start_dmm}${start_hmm}00
+WDR_LETKF=${start_ymm}${start_mmm}${start_dmm}${start_hmm}00
+WDR_date=${start_ymm}/${WDR_LETKF}
 WIDR=${WDR}/${start_ymm}/IDW
 WPDR=${WDR}/${start_ymm}/para
-WRDR=${WDR}/${WDR_date}/RAP
+WRDR=${WDR}/${WDR_date}/Pre
 WINDR=${WDR}/${WDR_date}/init
-WEDR=${WDR}/${EDR_date}/SWI
+WEDR=${WDR}/${WDR_date}/SWI
 
 IDW_file=Z__C_RJTD_20200703180000_SRF_GPV_Gll5km_Psw_ANAL_grib2.bin
 IRD=${EDR}/${WDR_date}/${kind}
@@ -99,8 +101,9 @@ lat_max=38.55
 
 
 Log_cycleUnzip="10 --- Unzip"
-Log_cycleInit="20 --- Init"
-
+Log_cycleInit="15 --- Init"
+Log_cycleRRA="20 --- Ensemble"
+Log_cycleRAP="30 --- RAP"
 
 readonly data_ext=RAP
 R=6371.1

@@ -21,15 +21,18 @@ def main_trra():
     
     keys = ['RRA_data', 'IDW_RRA_data', 'IDW_SWI_data']
     vals = [os.environ[k] for k in keys]
+
+    date_keys = 'input_RRA_date'
+    vals_date = os.environ[date_keys]
     
     
     input_SWI_IDW = vals[2]
     read_SWI_IDW  = np.load(input_SWI_IDW)
-    print(read_SWI_IDW)
+    
 
     input_RRA_IDW = vals[1]
     read_RRA_IDW  = np.load(input_RRA_IDW) 
-    print(read_RRA_IDW)
+    
 
     input_RRA_data  = vals[0]
     lon, lat, gdata = RRA_grib(input_RRA_data)
@@ -43,16 +46,7 @@ def main_trra():
         (min(read_SWI_IDW[:,1]-1) <= RRA_arr[:,1]) & 
         (RRA_arr[:,1] <= max(read_SWI_IDW[:,1]+1))
     ]
-    #print(RRA_arr_range)
-
-
-    #input_IDW_data = '/mnt/hail8/nakaya/Soil_program/calculation_test/result/Work/ctrltest/2020/IDW/data/IDW_dis.npy'
-    #read_IDW = np.load(input_IDW_data)
     
-
-
-    #input_init_data = '/mnt/hail8/nakaya/Soil_program/calculation_test/result/Work/ctrltest/2020/Init/data/initial_SWI.npy'
-    #read_init = np.load(input_init_data)
     
     index_SWI = len(read_SWI_IDW)
 
@@ -73,8 +67,8 @@ def main_trra():
 
     IDW_RRA_array = np.array(IDW_RRA_list)
     IDW_RRA_where = np.where((0 < IDW_RRA_array) & (IDW_RRA_array < 0.4), 0, IDW_RRA_array)
-    print(len(IDW_RRA_where))
-    tmpd = f'RRA_anal_{vals[5]}00.npy'
+    
+    tmpd = f'RRA_{vals_date}.npy'
     np.save(tmpd, IDW_RRA_where)
     
         

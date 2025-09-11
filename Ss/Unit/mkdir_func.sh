@@ -79,6 +79,7 @@ mkdir_para_function(){
 
 mkdir_ensemble_function(){
 
+    
     for SWI_cycle in SWI First Second Third;
     do
 	for ens_member in `seq -w 001 ${end_member}`
@@ -88,6 +89,10 @@ mkdir_ensemble_function(){
 		mkdir -p ${WEDR}/${SWI_cycle}/${ens_member}
 	    fi
 	done
+	if [ ! -d ${WEDR}/${SWI_cycle}/RAP ];
+	then
+	    mkdir -p ${WEDR}/${SWI_cycle}/RAP
+	fi
     done
 
 }

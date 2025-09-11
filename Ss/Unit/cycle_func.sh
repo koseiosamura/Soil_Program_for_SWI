@@ -15,6 +15,11 @@
 
 
 cycle_RAP_function(){
+    
+    if [ ! -d ${WRDR}/Ens/npy/RAP ];
+    then
+	mkdir -p ${WRDR}/Ens/npy/RAP
+    fi
 
     echo "========================================="
     echo "   Cycle 1hour"
@@ -24,9 +29,7 @@ cycle_RAP_function(){
     echo ${Log_cycleUnzip}
     unzip_RAP_function
     RAP_npy_function
-    #exit
     
-
 }
 
 
@@ -79,7 +82,7 @@ RAP_npy_function(){
             export pre_level=${pre_level}
             export output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
             python3 pre_npy.py
-            mv RAP_${output_RAP_date}.npy ${WRDR}/Ens/npy
+            mv RAP_${output_RAP_date}.npy ${WRDR}/Ens/npy/RAP
 	    log_npy_function
         fi
 	dateCycle_RAP=$((${dateCycle_RAP} + ${timedelta}))
@@ -128,9 +131,9 @@ cycle_initCheck_function(){
         local cy_dd=${dateCycle:6:2}
         local cy_hh=${dateCycle:8:2}
 	local output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
-	if [ ! -s ${WRDR}/Ens/npy/RAP_${output_RAP_date}.npy ];
+	if [ ! -s ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy ];
 	then
-	    fileCheck_function ${WRDR}/Ens/npy/RAP_${output_RAP_date}.npy
+	    fileCheck_function ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy
 	    exit
 	fi
 	for ens_member in `seq -w 001 ${end_member}`

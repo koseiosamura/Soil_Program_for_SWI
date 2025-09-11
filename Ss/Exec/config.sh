@@ -18,7 +18,7 @@ start_hmm=00
 
 end_ymm=1998
 end_mmm=08
-end_dmm=07
-end_hmm=23
+end_dmm=01
+end_hmm=01
 
 #-------------------------------------#

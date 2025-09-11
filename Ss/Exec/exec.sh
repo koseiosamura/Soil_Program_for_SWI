@@ -27,7 +27,7 @@ cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/init
 
 cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Unit
 . idw_SWI.sh
-SWI_idw_fuction
+#SWI_idw_fuction
 
 cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/init
 . init_SWI.sh

@@ -1,0 +1,27 @@
+import numpy as np
+
+
+
+#
+#
+#
+#
+#
+#
+#
+
+
+def npy_save_function(read_SWI,SWI,First,Second,Third,output_date_valu):
+
+
+    data_list = [SWI, First, Second, Third]
+    data_name = ['SWI', 'First', 'Second', 'Third']
+
+    for i in range(4):
+        
+        header = [np.ravel(read_SWI[:,0]), np.ravel(read_SWI[:,1]), np.ravel(data_list[i])]
+        stack = np.stack(header, 1)
+        tmpd =f'{data_name[i]}_anal_{output_date_valu}.npy'
+        np.save(tmpd, stack)
+
+

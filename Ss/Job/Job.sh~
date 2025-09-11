@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+set -e
+
+
+End_cycle_function(){
+
+    if [ ${dateCycle_SWI_unix} -gt ${dateCycle_End} ];
+    then
+	End_cycle_date=$(date -d "@$dateCycle_SWI_unix" "+%Y%m%d%H%M%S")
+	End_now=$(date "+%Y-%m-%d %H:%M:%S")
+	
+	echo "=============================="
+	echo "   End Cycle"
+	echo ""
+	echo "      ${End_cycle:0:12}"
+	echo "      ${End_now}"
+	echo ""
+	echo "=============================="
+	exit
+    fi
+
+}
