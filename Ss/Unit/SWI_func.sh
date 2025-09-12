@@ -12,38 +12,29 @@
 
 
 set -e
+. /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Job/Job.sh
+
+
 
 
 SWI_cycle_function(){
 
+    echo "${Log_cycleRRA}"
     dateCycle_SWI_unix=$((${dateCycle_Sta} - ${timedelta}))
     dateCycle_anal_unix=${dateCycle_Sta}
+    echo "### Ensemble start ###"
+    ENS_start_Job_function >> ${WDR}/${WDR_date}/log 
     while [ ${dateCycle_SWI_unix} -lt ${dateCycle_End} ];
     do
-	if [ ${dateCycle_SWI_unix} -gt ${end_unix} ];
-	then
-	    break
-	fi
-	for ens_member in `seq -w 001 ${end_member}`
-	do
-	    if [ ! -d ${WRDR}/Ens/npy/RRA/${ens_member} ];
-	    then
-		mkdir -p ${WRDR}/Ens/npy/RRA/${ens_member}
-	    fi
-	    if [ ${dateCycle_SWI_unix} -eq ${start_unix} ];
-	    then
-		for SWI_cycle in SWI First Second Third;
-		do
-		    cp ${WINDR}/npy/${SWI_cycle}/${SWI_cycle}_anal_${WDR_LETKF}.npy ${WEDR}/${SWI_cycle}/${ens_member}
-		done
-	    fi
-	    SWI_RRA_function ${ens_member}
-	done
+	Ensemble_cycle_function >> ${WDR}/${WDR_date}/log
 	dateCycle_SWI_unix=$((${dateCycle_SWI_unix} + ${timedelta}))
 	dateCycle_anal_unix=$((${dateCycle_anal_unix} + ${timedelta}))
     done
-    echo "${Log_cycleRRA}"
+    echo "### Ensemble end ###"
     
+    echo "${Log_cycleRAP}"
+    echo ""
+    echo ""
     dateCycle_RAP_unix=$((${dateCycle_Sta} - ${timedelta}))
     dateCycle_RAP_anal_unix=${dateCycle_Sta}
     if [ ${dateCycle_RAP_unix} -eq ${start_unix} ];
@@ -55,19 +46,50 @@ SWI_cycle_function(){
     fi
     while [ ${dateCycle_RAP_unix} -lt ${dateCycle_End} ];
     do
-	. /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Job/Job.sh
-        End_cycle_function ${dateCycle_RAP_unix} ${end_unix}
-	SWI_RAP_function
+	End_cycle_function ${dateCycle_RAP_unix} ${end_unix}
+	SWI_RAP_function >> ${WDR}/${WDR_date}/log
 	dateCycle_RAP_unix=$((${dateCycle_RAP_unix} + ${timedelta}))
 	dateCycle_RAP_anal_unix=$((${dateCycle_RAP_anal_unix} + ${timedelta}))
     done
-    echo "${Log_cycleRAP}"
+    
     
 }
 
 
+ 
+
+Ensemble_cycle_function(){
+
+    
+    
+    if [ ${dateCycle_SWI_unix} -gt ${end_unix} ];
+    then
+        break
+    fi
+    echo " --- Mep Start 001 >>>> 031 ---"
+    for ens_member in `seq -w 001 ${end_member}`
+    do
+        if [ ! -d ${WRDR}/Ens/npy/RRA/${ens_member} ];
+        then
+            mkdir -p ${WRDR}/Ens/npy/RRA/${ens_member}
+        fi
+        if [ ${dateCycle_SWI_unix} -eq ${start_unix} ];
+        then
+            for SWI_cycle in SWI First Second Third;
+            do
+                cp ${WINDR}/npy/${SWI_cycle}/${SWI_cycle}_anal_${WDR_LETKF}.npy ${WEDR}/${SWI_cycle}/${ens_member}
+            done
+        fi
+	
+        SWI_RRA_function ${ens_member} >> ${WDR}/${WDR_date}/log
+    done
+
+
+}
+
 
 SWI_RRA_function(){
+    
     
     local dateCycle_SWI=$(date -d "@$dateCycle_SWI_unix" "+%Y%m%d%H%M%S")
     local dateCycle_anal=$(date -d "@$dateCycle_anal_unix" "+%Y%m%d%H%M%S")
@@ -90,6 +112,7 @@ SWI_RRA_function(){
             echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             exit
         fi
+	
         local ${varname}=${SWI_valus}
         export ${varname}
     done
@@ -98,7 +121,8 @@ SWI_RRA_function(){
     export output_Ens_date=${dateCycle_anal:0:12}
     local parameter=${Para_data}
     export parameter
-    python3 RRA_SWI.py 
+    python3 RRA_SWI.py
+    
     for SWI_cycle in SWI First Second Third;
     do
         mv ${SWI_cycle}_anal_${dateCycle_anal:0:12}.npy ${WEDR}/${SWI_cycle}/${ens_member}
@@ -109,6 +133,9 @@ SWI_RRA_function(){
 
 
 SWI_RAP_function(){
+
+    RAP_start_Job_function
+    echo "### RAP start ###"
 
     local dateCycle_SWI=$(date -d "@$dateCycle_RAP_unix" "+%Y%m%d%H%M%S")
     local dateCycle_anal=$(date -d "@$dateCycle_RAP_anal_unix" "+%Y%m%d%H%M%S")
@@ -126,16 +153,21 @@ SWI_RAP_function(){
         fi
         local ${varname}=${SWI_valus}
         export ${varname}
+	echo "--- file check Initial ${SWI_cycle} Data ---"
     done
+    
+
     local Para_data=${WPDR}/${Parameter_file}
     export RAP_npy=${WRDR}/Ens/npy/RAP/RAP_${dateCycle_anal:0:12}.npy
     export output_RAP_date=${dateCycle_anal:0:12}
     local parameter=${Para_data}
     export parameter
     python3 RAP_SWI.py
+    echo "--- END  RAP SWI ---"
     for SWI_cycle in SWI First Second Third;
     do
         mv ${SWI_cycle}_anal_${dateCycle_anal:0:12}.npy ${WEDR}/${SWI_cycle}/RAP
     done
+    echo "### RAP end ###"
 
 }

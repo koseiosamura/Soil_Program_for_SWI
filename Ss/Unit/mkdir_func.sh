@@ -14,9 +14,6 @@ mkdir_WDR_function(){
 
     if [ ! -d ${WDR}/${start_ymm} ]; then
         mkdir -p ${WDR}/${start_ymm}/
-    else
-        echo ""
-        echo " ************ Exist ${WDR}/${start_ymm}"
     fi
 
 }

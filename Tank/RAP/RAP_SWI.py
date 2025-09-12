@@ -17,15 +17,13 @@ def init_SWI():
 
     SWI_keys = ['SWI_data', 'First_data', 'Second_data', 'Third_data']
     SWI_valu = [os.environ[Sk] for Sk in SWI_keys]
-    print(SWI_valu)
-
+    
     para_keys = 'parameter'
     para_valu = os.environ[para_keys]
 
     RAP_keys = 'RAP_npy'
     RAP_valu = os.environ[RAP_keys]
-    print(RAP_valu)
-
+    
     output_date_keys = 'output_RAP_date'
     output_date_valu = os.environ[output_date_keys]
     
@@ -62,7 +60,7 @@ def init_SWI():
     Second_arr  = []
     Third_arr   = []
     while num <= 6:
-        print(f' ---- mep {num}0',flush=True)
+        #print(f' ---- mep {num}0',flush=True)
 
         First_list, First_Z_list = first_function(SWI_index, read_SWI, read_First, RAP_where, parameter, First_list, First_arr, num)
         First_arr = np.array(First_list[:])

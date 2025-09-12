@@ -12,6 +12,9 @@
 #
 #
 
+set -e
+. /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Job/Job.sh
+
 
 
 cycle_RAP_function(){
@@ -26,9 +29,9 @@ cycle_RAP_function(){
     echo "       Init : ${c_yy}/${c_mm}/${c_dd} ${c_hh}:00"
     echo "       Anal : ${a_yy}/${a_mm}/${a_dd} ${a_hh}:00"
     echo "========================================="
-    echo ${Log_cycleUnzip}
-    unzip_RAP_function
-    RAP_npy_function
+    echo "${Log_cycleUnzip}"
+    unzip_RAP_function >> ${WDR}/${WDR_date}/log
+    RAP_npy_function >> ${WDR}/${WDR_date}/log
     
 }
 
@@ -36,6 +39,9 @@ cycle_RAP_function(){
 
 unzip_RAP_function(){
 
+    RAP_unzip_Job_function
+    echo "### Unzip start ###"
+    echo "Mep ${c_yy}${c_mm}${c_dd}${c_hh}00"
     local rddir=${RDR}/${c_yy}/${c_mm:1:1}
     local RAP_data=${JMA_Rader}${c_yy}${c_mm:1:1}${c_dd}.RAP
     fileCheck_function ${rddir}/${RAP_data}
@@ -48,17 +54,20 @@ unzip_RAP_function(){
         cp ${rddir}/${RAP_data} ${WRDR}/Ens/RAP
         ext="{init_RAP_data##*.}"
     fi
+
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre/unzip_c
     gcc -std=c99 -O2 -o rapunzip_hourly rapunzip_hourly.c
+    echo "    ---- gcc -std=c99 -O2 -o rapunzip_hourly ${RAP_data}"
     ./rapunzip_hourly ${WRDR}/Ens/RAP/${RAP_data} >> ${WRDR}/Ens/log/outpre.log
     mv *.bin ${WRDR}/Ens/bin
     log_RAP_function
-    
+    echo "### Unzip End ###"
 }
 
 
 RAP_npy_function(){
-
+    
+    
     local dateCycle_RAP=${dateCycle_Sta}
     while [ ${dateCycle_RAP} -le ${dateCycle_End} ];
     do
@@ -68,7 +77,9 @@ RAP_npy_function(){
 	local cy_dd=${dateCycle:6:2}
 	local cy_hh=${dateCycle:8:2}
 	local output_bin=${WRDR}/Ens/bin/output_${cy_yy}${cy_mm}${cy_dd}_${cy_hh}00.bin
+	
 	fileCheck_function ${output_bin}
+	
 	if [ "${JMA_Rader}" = "J" ];
         then
             cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre/npy_pre
@@ -82,23 +93,27 @@ RAP_npy_function(){
             export pre_level=${pre_level}
             export output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
             python3 pre_npy.py
+	    
             mv RAP_${output_RAP_date}.npy ${WRDR}/Ens/npy/RAP
 	    log_npy_function
         fi
 	dateCycle_RAP=$((${dateCycle_RAP} + ${timedelta}))
     done
-
+    echo "    ---- python3 init_pre_npy.py"
 }
 
 
 cycle_initCheck_function(){
     
+    Init_check_Job_function
+    echo "### Init start ###"
     local dateCycle_check=${dateCycle_Sta}
     if [ ! -s ${WIDR}/Ens/data/${IDW_RRA_file} ];
     then
 	fileCheck_function ${WIDR}/Ens/data/${IDW_RRA_file}
 	exit
     fi
+    echo "***** file check ${WIDR}/Ens/data/${IDW_RRA_file}"
     if [ ${dateCycle_check} -eq $((${start_unix} + ${timedelta})) ];
     then
 	for SWI_cycle in SWI First Second Third;
@@ -109,6 +124,7 @@ cycle_initCheck_function(){
 		exit
 	    fi
 	done
+	echo "***** file check Initial SWI Data"
     else
     	for SWI_cycle in SWI First Second Third;
 	do
@@ -121,11 +137,13 @@ cycle_initCheck_function(){
 		fi
 	    done
 	done
+	echo "***** file check Ensemble SWI Data"
     fi
+
+    
     while [ ${dateCycle_check} -le ${dateCycle_End} ];
     do
 	local dateCycle=$(date -d "@$dateCycle_check" "+%Y%m%d%H%M%S")
-        echo "${dateCycle}"
         local cy_yy=${dateCycle:0:4}
         local cy_mm=${dateCycle:4:2}
         local cy_dd=${dateCycle:6:2}
@@ -145,14 +163,15 @@ cycle_initCheck_function(){
 	    fi
 	done
 	dateCycle_check=$((${dateCycle_check} + ${timedelta}))
+	echo "***** file check Ensemble grib Data ${dateCycle}"
     done 
     if [ ! -s ${WIDR}/Ens/data/${IDW_RRA_file} ];
     then
         fileCheck_function ${WIDR}/Ens/data/${IDW_RRA_file}
         exit
     fi
-    
-    
+    echo "file check Parameter ${WIDR}/Ens/data/${IDW_RRA_file}"
+    echo "### Init end ###"
 }
 
 

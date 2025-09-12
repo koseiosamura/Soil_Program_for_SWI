@@ -5,16 +5,22 @@
 #
 #   idw_RRA.sh 
 #       
-#       1. Lon Lat change from JMA_RAP to JMA_SWI
+#       1. Lon Lat change from RRA to JMA_SWI
 #
 #
 #
 #==========================================================================
 
 set -e
+. /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Ss/Job/Job.sh
+
+
+ 
 
 RRA_idw_function(){
 
+    RRA_idw_Job_function
+    echo "### RRA IDW start ###"
     if [ ! -s ${IRD}/${start_member}/${IDW_RRA_grib} ];
     then
 	echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -37,7 +43,8 @@ RRA_idw_function(){
     export R=${R}
     export k=${k}
     export IDW_RRA_file=${IDW_RRA_file}
-    python3 idw_RRA.py > ${WIDR}/Ens/log/IDW_log.txt
+    python3 idw_RRA.py
     mv ${IDW_RRA_file} ${WIDR}/Ens/data
+    echo "### RRA IDW END ###"
 
 }

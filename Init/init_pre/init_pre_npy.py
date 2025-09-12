@@ -36,9 +36,9 @@ def init_pre_npy_main():
     index_sum = int(vals[3]) * int(vals[4])
     
     if index != index_sum:
-        print('')
-        print(' ******************* data size is not match *******************')
-        print(f'   bin data size : {index_sum}    data size : {index}')
+        print('',flush=True)
+        print(' ******************* data size is not match *******************',flush=True)
+        print(f'   bin data size : {index_sum}    data size : {index}',flush=True)
         sys.exit()
     
     

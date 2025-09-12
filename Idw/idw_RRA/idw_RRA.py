@@ -19,10 +19,10 @@ from idw_func import grib_select, calculate_distance
 
 def main_idw_RRA():
 
-    print('============================',flush=True)
-    print('         Start IDW ',flush=True)
-    print('============================',flush=True)
-    print('',flush=True)
+    #print('============================',flush=True)
+    #print('         Start IDW ',flush=True)
+    #print('============================',flush=True)
+    #print('',flush=True)
 
 
     keys_data = ['IDW_RRA_bin', 'IDW_SWI']
@@ -46,7 +46,7 @@ def main_idw_RRA():
     for grb in grbs:
         print(grb.name, flush=True)
     print('****************************************',flush=True)
-    print('',flush=True)
+    #print('',flush=True)
 
     lon, lat, gdata = grib_select(input_RRA,grbs)
     
@@ -71,9 +71,9 @@ def main_idw_RRA():
     
 
     now = datetime.now()
-    print('---------- Start calculation distance for IDW  -----------',flush=True)
-    print(f'       Start time : {now}',flush=True)
-    print('----------------------------------------------------------',flush=True)
+    #print('---------- Start calculation distance for IDW  -----------',flush=True)
+    #print(f'       Start time : {now}',flush=True)
+    #print('----------------------------------------------------------',flush=True)
 
 
     n = 1
@@ -84,7 +84,7 @@ def main_idw_RRA():
         
         
         if i in step_arange:
-            print(f' ---- step complete ({n})',flush=True)
+            print(f'   ---- step complete ({n}) ----',flush=True)
             n += 1
             
         if read_SWI[i,2] < 0:
@@ -123,11 +123,11 @@ def main_idw_RRA():
 
 
     now_end = datetime.now()
-    print('',flush=True)
-    print('============================',flush=True)
-    print('        Nomal End IDW ',flush=True)
-    print('============================',flush=True)
-    print(f'{now_end}',flush=True)
+    #print('',flush=True)
+    #print('============================',flush=True)
+    #print('        Nomal End IDW ',flush=True)
+    #print('============================',flush=True)
+    #print(f'{now_end}',flush=True)
 
 
 main_idw_RRA()

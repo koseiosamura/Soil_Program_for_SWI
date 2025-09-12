@@ -64,8 +64,7 @@ def npy_save_function(first_SWI_range, vals_output_date):
     Second = first_SWI_range[:,3]
     Third = first_SWI_range[:,4]
     SWI = First + Second + Third
-    print(SWI)
-
+    
     data_list = [SWI, First, Second, Third]
     data_name = ['SWI', 'First', 'Second', 'Third']
 

@@ -30,19 +30,7 @@ def calculate_distance(para_valu,lon_Anal,lon_IDW,lat_Anal,lat_IDW):
 
     lon_IDW, lat_IDW, lon_Anal, lat_Anal = map(np.radians, [lon_IDW, lat_IDW, lon_Anal, lat_Anal])
 
-    '''
-    dlat = lat_Anal - lat_IDW
-    dlon = lon_Anal - lon_IDW
-    #lat1 = radians(lat_IDW)
-    #lat2 = radians(lat_Anal)
-
-    a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
-    d = 2 * R * np.arcsin(np.sqrt(a))
-
-    return d
-    '''
-
-
+    
     distance = R * np.arccos(
         np.sin(lat_Anal) *
         np.sin(lat_IDW) +

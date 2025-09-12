@@ -13,12 +13,12 @@
 start_ymm=1998
 start_mmm=08
 start_dmm=01
-start_hmm=00
+start_hmm=12
 
 
 end_ymm=1998
 end_mmm=08
-end_dmm=01
+end_dmm=08
 end_hmm=01
 
 #-------------------------------------#

@@ -27,7 +27,14 @@ init_SWI_function(){
     . mkdir_func.sh
     mkdir_init_function
 
-    init_numerical_SWI_function
+    echo ""
+    echo ""
+    echo "==============================="
+    echo "        START INIT SWI"
+    echo "==============================="
+    echo "--- Mep Start"
+
+    init_numerical_SWI_function >> ${WDR}/${WDR_date}/log
 
 }
 
@@ -35,14 +42,14 @@ init_SWI_function(){
 
 init_numerical_SWI_function(){
 
-    init_first_num=${start_init_unix}
-    while [ ${start_init_unix} -le ${end_init_unix} ];
+    init_first_unix=${start_init_unix}
+    while [ ${init_first_unix} -le ${end_init_unix} ];
     do
-	current_init_unix=$((${start_init_unix} - ${timedelta}))
+	current_init_unix=$((${init_first_unix} - ${timedelta}))
 	current_init_date=$(date -d "@$current_init_unix" "+%Y%m%d%H%M%S")
-	anal_init_unix=${start_init_unix}
+	echo "--- Mep ${current_init_date}"
+	anal_init_unix=${init_first_unix}
 	anal_init_date=$(date -d "@$anal_init_unix" "+%Y%m%d%H%M%S")
-	echo "${current_init_date}"
 	init_RAP_npy_date=${anal_init_date:0:4}${anal_init_date:4:2}${anal_init_date:6:2}${anal_init_date:8:2}00
 	init_RAP_npy=${WRDR}/init/npy/init_RAP_${init_RAP_npy_date}.npy
 	init_output_SWI_date=${current_init_date:0:4}${current_init_date:4:2}${current_init_date:6:2}${current_init_date:8:2}00
@@ -53,12 +60,17 @@ init_numerical_SWI_function(){
             echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             exit
         fi
-	if [ ${init_first_num} -eq ${anal_init_unix} ];
+	if [ ${start_init_unix} -eq ${anal_init_unix} ];
 	then
+	    echo ""
+            echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            echo "Maked Initial Data for 2 week ago "
+            echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 	    first_init_SWI_function ${IDW_SWI_data}
 	fi
-	init_TANK_function
-	start_init_unix=$((start_init_unix + ${timedelta}))
+	init_TANK_function >> ${WDR}/${WDR_date}/log
+	echo "    --- End SWI "
+	init_first_unix=$(($init_first_unix + ${timedelta}))
     done
 
 }
@@ -93,7 +105,7 @@ first_init_SWI_function(){
 
 init_TANK_function(){
     
-    if [ ${init_first_num} -eq ${anal_init_unix} ];
+    if [ ${start_init_unix} -eq ${anal_init_unix} ];
     then
 	for init_SWI_cycle in SWI First Second Third;
 	do
@@ -133,6 +145,7 @@ init_TANK_function(){
         echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         exit
     fi
+    echo "    --- file check "
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Tank/init_SWI
     export init_RAP_npy=${init_RAP_npy}
     export parameter=${Para_data}
