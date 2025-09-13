@@ -51,6 +51,7 @@ init_pre_function(){
     echo "--- END make DIR"
     
     
+    #unzip_init_RAP_function
     unzip_init_RAP_function >> ${WDR}/${WDR_date}/log
     echo "--- END Unzip RAP"
     
@@ -73,6 +74,7 @@ unzip_init_RAP_function(){
     do
 	echo " Mep 00${num}"
         current_init_date=$(date -d "@$current_init_unix" "+%Y%m%d%H%M%S")
+	E=$(date -d "@$end_init_unix" "+%Y%m%d%H%M%S")
 	
 	rddir=${RDR}/${current_init_date:0:4}/${current_init_date:5:1}
         init_RAP_data=${JMA_Rader}${current_init_date:0:4}${current_init_date:5:1}${current_init_date:6:2}.RAP
@@ -121,12 +123,20 @@ EOF
 init_RAP_npy_function(){
     
     init_date_cycle_start=$1
-    init_date_cycle_end=$(($1 + $init_timehour * $timedelta - $timedelta - $start_hmm))
+    if [ ${init_date_cycle_start} -eq ${start_init_unix} ];
+    then
+	init_date_cycle_end=$(($1 + $init_timehour * $timedelta - $timedelta - $start_hmm * $timedelta))
+    else
+	init_date_cycle_end=$(($1 + $init_timehour * $timedelta))
+    fi
     break_unix=$(($1 + $init_timehour * $timedelta))
     break_date=$(date -d "@$break_unix" "+%Y%m%d%H%M%S")
     while [ ${init_date_cycle_start} -lt ${init_date_cycle_end} ];
     do
-	init_date_cycle=$(date -d "@$init_date_cycle_start" "+%Y%m%d%H%M%S")
+	local init_date_cycle=$(date -d "@$init_date_cycle_start" "+%Y%m%d%H%M%S")
+	#END=$(date -d "@$init_date_cycle_end" "+%Y%m%d%H%M%S")
+	#echo "${init_date_cycle}"
+	#echo "${END}" 
 	if [ ${init_date_cycle:6:2}${init_date_cycle:8:2} -eq ${break_date:6:2}01 ];
 	then
 	    break

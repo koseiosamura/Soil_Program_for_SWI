@@ -48,14 +48,12 @@ unzip_RAP_function(){
     if [ ! -s ${WRDR}/Ens/RAP/${RAP_data} ];
     then
         cp ${rddir}/${RAP_data} ${WRDR}/Ens/RAP
-        ext="{init_RAP_data##*.}"
     else
         rm ${WRDR}/Ens/RAP/${RAP_data}
         cp ${rddir}/${RAP_data} ${WRDR}/Ens/RAP
-        ext="{init_RAP_data##*.}"
     fi
 
-    cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Pre/unzip_c
+    cd ${WDR}/${WDR_date}/unzip_c
     gcc -std=c99 -O2 -o rapunzip_hourly rapunzip_hourly.c
     echo "    ---- gcc -std=c99 -O2 -o rapunzip_hourly ${RAP_data}"
     ./rapunzip_hourly ${WRDR}/Ens/RAP/${RAP_data} >> ${WRDR}/Ens/log/outpre.log

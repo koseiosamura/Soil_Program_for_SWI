@@ -34,6 +34,7 @@ init_SWI_function(){
     echo "==============================="
     echo "--- Mep Start"
 
+    #init_numerical_SWI_function
     init_numerical_SWI_function >> ${WDR}/${WDR_date}/log
 
 }
@@ -45,9 +46,9 @@ init_numerical_SWI_function(){
     init_first_unix=${start_init_unix}
     while [ ${init_first_unix} -le ${end_init_unix} ];
     do
+	
 	current_init_unix=$((${init_first_unix} - ${timedelta}))
 	current_init_date=$(date -d "@$current_init_unix" "+%Y%m%d%H%M%S")
-	echo "--- Mep ${current_init_date}"
 	anal_init_unix=${init_first_unix}
 	anal_init_date=$(date -d "@$anal_init_unix" "+%Y%m%d%H%M%S")
 	init_RAP_npy_date=${anal_init_date:0:4}${anal_init_date:4:2}${anal_init_date:6:2}${anal_init_date:8:2}00
@@ -66,13 +67,14 @@ init_numerical_SWI_function(){
             echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
             echo "Maked Initial Data for 2 week ago "
             echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	    echo "### Start SWI ###"
 	    first_init_SWI_function ${IDW_SWI_data}
 	fi
 	init_TANK_function >> ${WDR}/${WDR_date}/log
-	echo "    --- End SWI "
+	
 	init_first_unix=$(($init_first_unix + ${timedelta}))
     done
-
+    echo "### End SWI ###"
 }
 
 
