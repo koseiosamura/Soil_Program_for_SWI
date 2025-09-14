@@ -24,12 +24,8 @@ cycle_RAP_function(){
 	mkdir -p ${WRDR}/Ens/npy/RAP
     fi
 
-    echo "========================================="
-    echo "   Cycle 1hour"
-    echo "       Init : ${c_yy}/${c_mm}/${c_dd} ${c_hh}:00"
-    echo "       Anal : ${a_yy}/${a_mm}/${a_dd} ${a_hh}:00"
-    echo "========================================="
-    echo "${Log_cycleUnzip}"
+    #echo "${Log_cycleUnzip}"
+    
     unzip_RAP_function >> ${WDR}/${WDR_date}/log
     RAP_npy_function >> ${WDR}/${WDR_date}/log
     
@@ -39,11 +35,11 @@ cycle_RAP_function(){
 
 unzip_RAP_function(){
 
-    RAP_unzip_Job_function
+    
     echo "### Unzip start ###"
-    echo "Mep ${c_yy}${c_mm}${c_dd}${c_hh}00"
-    local rddir=${RDR}/${c_yy}/${c_mm:1:1}
-    local RAP_data=${JMA_Rader}${c_yy}${c_mm:1:1}${c_dd}.RAP
+    echo "Mep ${cj_yy}${cj_mm}${cj_dd}${cj_hh}00"
+    local rddir=${RDR}/${cj_yy}/${cj_mm:1:1}
+    local RAP_data=${JMA_Rader}${cj_yy}${cj_mm:1:1}${cj_dd}.RAP
     fileCheck_function ${rddir}/${RAP_data}
     if [ ! -s ${WRDR}/Ens/RAP/${RAP_data} ];
     then
@@ -66,14 +62,22 @@ unzip_RAP_function(){
 RAP_npy_function(){
     
     
-    local dateCycle_RAP=${dateCycle_Sta}
-    while [ ${dateCycle_RAP} -le ${dateCycle_End} ];
+    local dateCycle_RAP=${dateCycle_Sta_RAP}
+    local dateCycle_RAP_UTC=${UTC_unix}
+    while [ ${dateCycle_RAP} -le ${dateCycle_End_RAP} ];
     do
+	UTC_date=$(date -d "@$dateCycle_RAP_UTC" "+%Y%m%d%H%M%S")
+	#echo "${UTC_date}"
+	
 	local dateCycle=$(date -d "@$dateCycle_RAP" "+%Y%m%d%H%M%S")
 	local cy_yy=${dateCycle:0:4}
 	local cy_mm=${dateCycle:4:2}
 	local cy_dd=${dateCycle:6:2}
 	local cy_hh=${dateCycle:8:2}
+	local u_yy=${UTC_date:0:4}
+	local u_mm=${UTC_date:4:2}
+	local u_dd=${UTC_date:6:2}
+	local u_hh=${UTC_date:8:2}
 	local output_bin=${WRDR}/Ens/bin/output_${cy_yy}${cy_mm}${cy_dd}_${cy_hh}00.bin
 	
 	fileCheck_function ${output_bin}
@@ -89,15 +93,17 @@ RAP_npy_function(){
             export RAP_lon_max=${RAP_lon_max}
             export RAP_lat_max=${RAP_lat_max}
             export pre_level=${pre_level}
-            export output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
+            export output_RAP_date=${u_yy}${u_mm}${u_dd}${u_hh}00
+	    
             python3 pre_npy.py
 	    
             mv RAP_${output_RAP_date}.npy ${WRDR}/Ens/npy/RAP
 	    log_npy_function
         fi
-	dateCycle_RAP=$((${dateCycle_RAP} + ${timedelta}))
+	dateCycle_RAP=$(($dateCycle_RAP + $timedelta))
+	dateCycle_RAP_UTC=$(($dateCycle_RAP_UTC + $timedelta))
     done
-    echo "    ---- python3 init_pre_npy.py"
+    
 }
 
 
@@ -146,17 +152,18 @@ cycle_initCheck_function(){
         local cy_mm=${dateCycle:4:2}
         local cy_dd=${dateCycle:6:2}
         local cy_hh=${dateCycle:8:2}
-	local output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
-	if [ ! -s ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy ];
-	then
-	    fileCheck_function ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy
-	    exit
-	fi
+	#local output_RAP_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
+	#if [ ! -s ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy ];
+	#then
+	#    fileCheck_function ${WRDR}/Ens/npy/RAP/RAP_${output_RAP_date}.npy
+	#    exit
+	#fi
+	local output_RRA_date=${cy_yy}${cy_mm}${cy_dd}${cy_hh}00
 	for ens_member in `seq -w 001 ${end_member}`
 	do
-	    if [ ! -s ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RAP_date}.grib2 ];
+	    if [ ! -s ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RRA_date}.grib2 ];
 	    then
-		fileCheck_function ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RAP_date}.grib2
+		fileCheck_function ${IRD}/${ens_member}/${cond_kind}_${kind}_${output_RRA_date}.grib2
 		exit
 	    fi
 	done

@@ -44,6 +44,7 @@ init_SWI_function(){
 init_numerical_SWI_function(){
 
     init_first_unix=${start_init_unix}
+    #day=1
     while [ ${init_first_unix} -le ${end_init_unix} ];
     do
 	
@@ -69,10 +70,13 @@ init_numerical_SWI_function(){
             echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 	    echo "### Start SWI ###"
 	    first_init_SWI_function ${IDW_SWI_data}
+	    echo "   --- maked first data ---"
+	    #echo "       --- DAY ${day} complete "
 	fi
 	init_TANK_function >> ${WDR}/${WDR_date}/log
-	
+	#echo "     --- DAY ${day} complete ---"
 	init_first_unix=$(($init_first_unix + ${timedelta}))
+	#day=$(($day + 1))
     done
     echo "### End SWI ###"
 }
@@ -147,7 +151,7 @@ init_TANK_function(){
         echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         exit
     fi
-    echo "    --- file check "
+    
     cd /mnt/hail8/nakaya/Soil_program/calculation_Soil/Nhm_Ensemble_SWI/Tank/init_SWI
     export init_RAP_npy=${init_RAP_npy}
     export parameter=${Para_data}

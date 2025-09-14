@@ -25,6 +25,9 @@ date_function(){
     start_unix=$(date -d "$start_date" +%s)
     end_unix=$(date -d "$end_date" +%s)
 
+    start_JST_unix=$(($start_unix + $UTCdelta * $timedelta))
+    end_JST_unix=$(($end_unix + $UTCdelta * $timedelta))
+
 }
 
 
@@ -34,12 +37,15 @@ init_date_function(){
     #if [ "$start_hmm" != 00 ];
     #then
 	
-    init_timedelta=$(( init_timeday * init_timehour * timedelta ))
-    start_init_unix=$((start_unix - (init_timedelta - timedelta)))
+    init_timedelta=$(($init_timeday * $init_timehour * $timedelta ))
+    start_init_unix=$(($start_unix - ($init_timedelta - $timedelta)))
     end_init_unix=${start_unix}
     start_init_date=$(date -d "@$start_init_unix" "+%Y%m%d%H%M%S")
     end_init_date=$(date -d "@$end_init_unix" "+%Y%m%d%H%M%S")
 
+
+    init_start_JST_unix=$(($start_init_unix + $UTCdelta * $timedelta))
+    init_end_JST_unix=$(($start_unix + $UTCdelta * $timedelta))
     
 }
 

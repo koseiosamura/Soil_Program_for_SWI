@@ -12,8 +12,8 @@
 
 start_ymm=1998
 start_mmm=08
-start_dmm=01
-start_hmm=06
+start_dmm=03
+start_hmm=12
 
 
 end_ymm=1998

@@ -22,9 +22,9 @@ RRA_idw_Job_function(){
     echo "     Cycle 0"
     echo "              IDW RRA"
     echo ""
-    echo "======================================="
-    echo "     START : ${start_RRA_idw}"
     echo "---------------------------------------"
+    echo "     START : ${start_RRA_idw}"
+    echo "======================================="
 
 
 }
@@ -39,24 +39,21 @@ Init_check_Job_function(){
     echo "     Cycle 15"
     echo "             INIT CHECK"
     echo ""
-    echo "======================================="
-    echo "     START : ${start_init_check}"
     echo "---------------------------------------"
+    echo "     START : ${start_init_check}"
+    echo "======================================="
 
 }
 
-RAP_unzip_Job_function(){
+RAP_start_Job_function(){
 
     start_unzip_now=$(date "+%Y-%m-%d %H:%M:%S")
     
-    echo "======================================="
-    echo ""
-    echo "     Cycle 10"
-    echo "           UNZIP [ RAP ]"
-    echo ""
-    echo "======================================="
-    echo "     START : ${start_unzip_now}"
-    echo "---------------------------------------"
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+    echo "  Cycle 1hour"
+    echo "          RAP NUMREICAL SWI"
+    echo "          START : ${start_unzip_now}"
+    echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 }
 
 
@@ -70,9 +67,9 @@ ENS_start_Job_function(){
     echo "     Cycle 20"
     echo "       Numerical SWI [ Ensemble ]"
     echo ""
-    echo "======================================="
+    echo "---------------------------------------"
     echo "     START : ${start_RRA_now}"
-    echo "---------------------------------------"
+    echo "======================================="
 
 
 
@@ -80,20 +77,6 @@ ENS_start_Job_function(){
 
 
 
-
-
-RAP_start_Job_function(){
-
-    start_RAP_now=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "======================================="
-    echo ""
-    echo "     Cycle 30"
-    echo "        Numerical SWI [ RAP ]"
-    echo ""
-    echo "======================================="
-    echo "     START : ${start_RAP_now}"
-    echo "---------------------------------------"
-}
 
 
 

@@ -36,7 +36,7 @@ readonly init_timeday=14   # make initial SWI (d)
 readonly init_timehour=24  # initial timedelta for hour (h)
 readonly timehour=24       # timedelta for hour (h)
 readonly delta=10          # numerical cycle (m), fixed 10min [10=10min, 60=1hour]
-
+readonly UTCdelta=9
 
 
 #---------------------------
